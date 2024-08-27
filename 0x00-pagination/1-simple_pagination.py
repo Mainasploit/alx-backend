@@ -1,31 +1,16 @@
 #!/usr/bin/env python3
-"""Write a function named index_range that takes two integer
-arguments page and page_size.
+""" simple pagintation """
 
-The function should return a tuple of size two containing a
-start index and an end index corresponding to the range of
-indexes to return in a list for those particular pagination
-parameters.
-
-Page numbers are 1-indexed, i.e. the first page is page 1.
-"""
-
-
-from typing import Tuple, List
 import csv
 import math
+from typing import List
 
 
-def index_range(page: int, page_size: int) -> Tuple[int, int]:
-    """
-    start index and an end index corresponding to the range of
-    """
-    # if page is 1, start at 0 and end at page_size
-    # if page is 2, start at ((page-1) * page_size) and
-    # end at (page_size * page)
-    # if page is 3, start at ((page-1) * page_size) and
-    # end at (page_size * page)
-    return ((page-1) * page_size, page_size * page)
+def index_range(page: int, page_size: int) -> tuple:
+    """ Returns a tuple with the start and the end index of a page """
+    start = (page - 1) * page_size
+    end = start + page_size
+    return (start, end)
 
 
 class Server:
@@ -48,16 +33,8 @@ class Server:
         return self.__dataset
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
-        """return the appropriate page of the dataset"""
-        assert type(page) is int and page > 0
-        assert type(page_size) is int and page_size > 0
-
-        # get the data from the csv
-        data = self.dataset()
-
-        try:
-            # get the index to start and end at
-            start, end = index_range(page, page_size)
-            return data[start:end]
-        except IndexError:
-            return []
+        """ get page rows """
+        assert isinstance(page, int) and page > 0
+        assert isinstance(page_size, int) and page_size > 0
+        start, end = index_range(page, page_size)
+        return self.dataset()[start:end]
